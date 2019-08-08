@@ -7,23 +7,6 @@ console.log(cardsAttach);
            https://api.github.com/users/<your name>
 */
 
-axios.get('https://api.github.com/users/74ultra')
-  .then(response => {
-    
-    const gitData = response.data;
-
-
-
-    cardsAttach.appendChild(createUserCard(gitData));
-    
-  })
-
-  .catch(error => {
-    console.log('Here is the problem', error);
-  })
-
-console.log(axios.get('https://api.github.com/users/74ultra'));
-
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -31,6 +14,19 @@ console.log(axios.get('https://api.github.com/users/74ultra'));
 
    Skip to Step 3.
 */
+
+axios.get('https://api.github.com/users/74ultra')
+  .then(response => {
+    
+    const gitData = response.data;
+    
+    cardsAttach.appendChild(createUserCard(gitData));
+    
+  })
+
+  .catch(error => {
+    console.log('Here is the problem', error);
+  })
 
 /* Step 4: Pass the data received from Github into your function, 
            create a new component and add it to the DOM as a child of .cards
@@ -46,6 +42,8 @@ console.log(axios.get('https://api.github.com/users/74ultra'));
           user, and adding that card to the DOM.
 */
 
+// Adding instructor cards
+
 const instructors = ['tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
 
 instructors.forEach(inst => {
@@ -53,7 +51,6 @@ instructors.forEach(inst => {
     .then(response => {
 
       const gitData = response.data;
-      console.log('Here is your gitData', gitData);
 
       cardsAttach.appendChild(createUserCard(gitData));
     })
@@ -62,6 +59,31 @@ instructors.forEach(inst => {
       console.log('Here is the problem', error)
     })
 })
+
+// Adding follower cards
+
+axios.get('https://api.github.com/users/74ultra')
+  .then(response => {
+    
+    const followersUrl = response.data.followers_url;
+
+    axios.get(followersUrl)
+      .then(res => {
+        
+        const followerArray = res.data;
+
+        followerArray.forEach(item => {
+          cardsAttach.appendChild(createUserCard(item))
+        })
+      })
+
+      .catch(error => {
+        console.log('There is a problem. Here it is: ', error)
+      })
+  })
+
+
+  
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
